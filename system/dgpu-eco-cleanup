@@ -1,0 +1,14 @@
+#!/bin/bash
+
+flag=/sys/devices/platform/asus-nb-wmi/dgpu_disable
+
+if [[ "$(cat "$flag" 2>/dev/null)" != 1 ]]; then
+    echo "Дискретный графический процессор активен, ничего не делаю"
+    exit 0
+fi
+
+for dev in $(ls -d /sys/bus/pci/devices/*/ 2>/dev/null | sort -r); do
+    [[ "$(cat "$dev/vendor" 2>/dev/null)" == 0x10de ]] || continue
+    echo "Убираю с шины $(basename "$dev")"
+    echo 1 > "$dev/remove"
+done

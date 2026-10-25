@@ -1,0 +1,13 @@
+#!/bin/bash
+
+asusctl profile next >/dev/null 2>&1
+p=$(asusctl profile get 2>/dev/null | sed -n 's/^Active profile: //p')
+
+case "$p" in
+    Quiet)       icon=battery-profile-powersave-symbolic;   text="Тихий" ;;
+    Balanced)    icon=battery-profile-balanced-symbolic;    text="Сбалансированный" ;;
+    Performance) icon=battery-profile-performance-symbolic; text="Производительный" ;;
+    *)           icon=preferences-system-power;             text="$p" ;;
+esac
+
+qdbus6 org.kde.plasmashell /org/kde/osdService org.kde.osdService.showText "$icon" "$text режим"

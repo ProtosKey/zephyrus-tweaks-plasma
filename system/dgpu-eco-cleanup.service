@@ -1,0 +1,11 @@
+[Unit]
+Description=Remove powered-off NVIDIA dGPU from PCI bus in Eco mode
+After=systemd-modules-load.service
+Before=display-manager.service sleep.target nvidia-suspend.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/dgpu-eco-cleanup
+
+[Install]
+WantedBy=multi-user.target sleep.target

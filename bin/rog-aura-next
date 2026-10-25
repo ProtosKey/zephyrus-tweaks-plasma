@@ -1,0 +1,14 @@
+#!/bin/bash
+
+asusctl aura effect --next-mode >/dev/null 2>&1
+sleep 0.3
+m=$(grep -m1 -oP 'current_mode:\s*\K\w+' /etc/asusd/aura_*.ron 2>/dev/null)
+case "$m" in
+    Static)       icon=color-fill;               text="Статичная" ;;
+    Breathe)      icon=brightness-low;           text="Дышащая" ;;
+    RainbowCycle) icon=view-refresh;             text="Циклическая" ;;
+    RainbowWave)  icon=view-media-visualization; text="Радужная" ;;
+    Pulse)        icon=love-symbolic;            text="Пульсирующая" ;;
+    *)            icon=input-keyboard;           text="${m:-?}" ;;
+esac
+qdbus6 org.kde.plasmashell /org/kde/osdService org.kde.osdService.showText "$icon" "$text подсветка"
